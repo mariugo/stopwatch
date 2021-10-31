@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:stopwatch/ui/reset_button.dart';
+import 'package:stopwatch/ui/start_stop_button.dart';
 
 import 'stopwatch_renderer.dart';
 
@@ -37,9 +39,34 @@ class _StopWatchState extends State<StopWatch>
     return LayoutBuilder(
       builder: (context, constraints) {
         final radius = constraints.maxWidth / 2;
-        return StopWatchRenderer(
-          radius: radius,
-          elapsed: _elapsed,
+        return Stack(
+          children: [
+            StopWatchRenderer(
+              radius: radius,
+              elapsed: _elapsed,
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: ResetButton(
+                  onPressed: () {},
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: StartStopButton(
+                  isRunning: true,
+                  onPressed: () {},
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
