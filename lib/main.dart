@@ -29,7 +29,13 @@ class MyHomePage extends StatelessWidget {
     return const SafeArea(
       child: Scaffold(
         body: Center(
-          child: StopWatch(),
+          child: Padding(
+            padding: EdgeInsets.all(32.0),
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              child: StopWatch(),
+            ),
+          ),
         ),
       ),
     );
