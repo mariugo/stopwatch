@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:stopwatch/ui/clock_hand.dart';
-import 'package:stopwatch/ui/clock_markers.dart';
 
+import 'clock_hand.dart';
+import 'clock_markers.dart';
 import 'elapsed_time_text.dart';
 
 class StopWatchRenderer extends StatelessWidget {

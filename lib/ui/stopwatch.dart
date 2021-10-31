@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:stopwatch/ui/reset_button.dart';
-import 'package:stopwatch/ui/start_stop_button.dart';
 
+import 'reset_button.dart';
+import 'start_stop_button.dart';
 import 'stopwatch_renderer.dart';
 
 class StopWatch extends StatefulWidget {
@@ -14,7 +14,10 @@ class StopWatch extends StatefulWidget {
 
 class _StopWatchState extends State<StopWatch>
     with SingleTickerProviderStateMixin {
-  Duration _elapsed = Duration.zero;
+  Duration _previousElapsed = Duration.zero;
+  Duration _currentlyElapsed = Duration.zero;
+  Duration get _elapsed => _previousElapsed + _currentlyElapsed;
+  bool _isRunning = false;
   late final Ticker _ticker;
 
   @override
@@ -22,16 +25,37 @@ class _StopWatchState extends State<StopWatch>
     super.initState();
     _ticker = createTicker((elapsed) {
       setState(() {
-        _elapsed = elapsed;
+        _currentlyElapsed = elapsed;
       });
     });
-    _ticker.start();
   }
 
   @override
   void dispose() {
     _ticker.dispose();
     super.dispose();
+  }
+
+  void _toggleRunning() {
+    setState(() {
+      _isRunning = !_isRunning;
+      if (_isRunning) {
+        _ticker.start();
+      } else {
+        _ticker.stop();
+        _previousElapsed += _currentlyElapsed;
+        _currentlyElapsed = Duration.zero;
+      }
+    });
+  }
+
+  void _reset() {
+    _ticker.stop();
+    setState(() {
+      _isRunning = false;
+      _previousElapsed = Duration.zero;
+      _currentlyElapsed = Duration.zero;
+    });
   }
 
   @override
@@ -51,7 +75,7 @@ class _StopWatchState extends State<StopWatch>
                 width: 80,
                 height: 80,
                 child: ResetButton(
-                  onPressed: () {},
+                  onPressed: _reset,
                 ),
               ),
             ),
@@ -61,8 +85,8 @@ class _StopWatchState extends State<StopWatch>
                 width: 80,
                 height: 80,
                 child: StartStopButton(
-                  isRunning: true,
-                  onPressed: () {},
+                  isRunning: _isRunning,
+                  onPressed: _toggleRunning,
                 ),
               ),
             ),
